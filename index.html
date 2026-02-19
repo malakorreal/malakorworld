@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malakor World | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo"></div>
+      <div class="preloader-spinner">
+        <div class="preloader-ring preloader-ring-outer"></div>
+        <div class="preloader-ring preloader-ring-inner"></div>
+        <div class="preloader-orb"></div>
+      </div>
+      <p class="preloader-text">กําลังโหลด.....</p>
+    </div>
+  </div>
+
+  <div class="floating-shapes" aria-hidden="true">
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand" data-i18n="brand"></div>
+      <nav class="main-nav">
+        <a href="#home" data-i18n="navHome">หน้าหลัก</a>
+        <a href="#about" data-i18n="navAbout">เกี่ยวกับ</a>
+        <a href="#projects" data-i18n="navProjects">โปรเจค</a>
+        <a href="#products" data-i18n="navProducts">สินค้า</a>
+        <a href="https://guns.lol/malakorkubb" target="_blank" rel="noreferrer" data-i18n="navContact">ติดต่อ</a>
+      </nav>
+      <div class="header-controls">
+        <button class="header-chip theme-toggle" id="theme-toggle" type="button">
+          <span class="theme-dot"></span>
+          <span class="theme-label" data-i18n-theme-label>โหมดมืด</span>
+        </button>
+        <button class="header-chip lang-toggle" id="lang-toggle" type="button" aria-label="เปลี่ยนภาษา">
+          <span class="lang-option lang-th">TH</span>
+          <span class="lang-divider">/</span>
+          <span class="lang-option lang-en">EN</span>
+        </button>
+        <button class="nav-toggle" aria-label="สลับเมนู">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="section hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title" data-i18n="heroTitle">สวัสดี, ผม Malakor</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">Freelance developer , Game Developer</p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn primary" data-i18n="heroPrimaryCta">ดูโปรเจค</a>
+          <a href="https://guns.lol/malakorkubb" target="_blank" rel="noreferrer" class="btn outline" data-i18n="heroSecondaryCta">ติดต่อ</a>
+        </div>
+      </div>
+      <div class="hero-scroll-hint">
+        <span class="hero-scroll-label" data-i18n="heroScrollHint">เลื่อนลง</span>
+        <span class="hero-scroll-arrow"></span>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="section-inner">
+        <div class="about-layout">
+          <div class="about-visual">
+            <div class="about-visual-image">
+              <img src="assets/about/main.jpg" alt="ภาพตัวละครหรืออวาตาร์ของ Malakor">
+            </div>
+            <div class="about-name-vertical">
+              <span style="letter-spacing: 21px;">MALAKOR</span>
+            </div>
+          </div>
+          <div class="about-content">
+            <p class="about-kicker">PROFILE</p>
+            <h2 class="section-title about-title" data-i18n="aboutTitle">เกี่ยวกับฉัน</h2>
+            <p class="about-body" data-i18n="aboutIntro">
+              ยินดีต้อนรับสู่โลกของ Malakor ที่นี่คือพื้นที่สำหรับโชว์โปรเจค ความคิดสร้างสรรค์ และสิ่งที่ฉันกำลังทำอยู่ตอนนี้
+            </p>
+            <p class="about-body" data-i18n="aboutGoalBody">
+              ฉันชอบสร้างประสบการณ์ใหม่ ๆ ให้คนที่เข้ามา ไม่ว่าจะเป็นโลกในเกม เว็บไซต์ หรือโปรเจคเล็ก ๆ ที่ทำให้วันธรรมดาดูพิเศษขึ้น
+            </p>
+            <div class="about-social">
+              <a href="#" class="about-social-link">GitHub</a>
+              <a href="https://www.instagram.com/_mzikyy/" class="about-social-link">Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section section-alt">
+      <div class="section-inner">
+        <div class="projects-intro">
+          <h2 class="section-title" data-i18n="projectsTitle">โปรเจค</h2>
+          <p class="section-description" data-i18n="projectsIntro">
+            โปรเจคที่กำลังพัฒนาอยู่ตอนนี้ สามารถนำไปใช้ต่อยอดหรือเป็นแรงบันดาลใจให้โปรเจคของคุณได้
+          </p>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-media">
+              <img src="assets/projects/project-1.png" alt="ภาพตัวอย่างโปรเจค 1">
+            </div>
+            <div class="project-meta">ACTIVE PROJECT</div>
+            <h3 class="project-title" data-i18n="project1Title">Startify</h3>
+            <p class="project-description" data-i18n="project1Body">
+              แอปฟังเพลงที่ไม่มีโฆษณา และมีการ Sync เพลงกับ Youtube และมีระบบ Classic เช่น Shuffle, Repeat , Playlist
+            </p>
+            <div class="project-links"> 
+              <a href="#" class="project-link">รายละเอียดเพิ่มเติม</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img src="assets/projects/project-2.png" alt="ภาพตัวอย่างโปรเจค 2">
+            </div>
+            <div class="project-meta">ACTIVE PROJECT</div>
+            <h3 class="project-title" data-i18n="project2Title">เว็บไซต์ชุมชน</h3>
+            <p class="project-description" data-i18n="project2Body">
+              เว็บไซต์ศูนย์กลางชุมชนสำหรับดูข่าวสาร อีเวนต์ และระบบจัดการสมาชิก ใช้งานง่ายทั้งบนคอมและมือถือ
+            </p>
+            <div class="project-links">
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img src="assets/projects/project-3.png" alt="ภาพตัวอย่างโปรเจค 3">
+            </div>
+            <div class="project-meta">ACTIVE PROJECT</div>
+            <h3 class="project-title" data-i18n="project3Title">ระบบกิจกรรม</h3>
+            <p class="project-description" data-i18n="project3Body">
+              ระบบจัดอันดับภารกิจ เควสรายวัน และของรางวัล สำหรับสร้างกิจกรรมในชุมชนให้สนุกและมีเป้าหมายมากขึ้น
+            </p>
+            <div class="project-links">
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="productsTitle">สินค้า</h2>
+        <p class="section-description" data-i18n="productsIntro">
+          ส่วนนี้สามารถใช้โชว์สินค้า Digital หรือ Physical เช่น Map, Texture Pack หรือ Merchandise
+        </p>
+        <div class="card-grid">
+          <article class="card product-card">
+            <h3 data-i18n="product1Title">Fantasy Map Pack</h3>
+            <p data-i18n="product1Body">แพ็กแผนที่ธีมแฟนตาซีสำหรับเล่นกับเพื่อนหรือใช้จัดกิจกรรม</p>
+            <span class="tag" data-i18n="comingSoon">Coming Soon</span>
+          </article>
+          <article class="card product-card">
+            <h3 data-i18n="product2Title">Resource Pack</h3>
+            <p data-i18n="product2Body">ชุดกราฟิกปรับแต่งบรรยากาศให้โลกของคุณดูมีชีวิตมากขึ้น</p>
+            <span class="tag" data-i18n="comingSoon">Coming Soon</span>
+          </article>
+          <article class="card product-card">
+            <h3 data-i18n="product3Title">Merchandise</h3>
+            <p data-i18n="product3Body">เสื้อ หมวก และของสะสมจากโลกของ Malakor</p>
+            <span class="tag" data-i18n="thinking">คิดอยู่</span>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span data-i18n="footerTagline">สร้างด้วยความรักในโลกแฟนตาซี</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
