@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "live-server --port=5173 --entry-file=index.html",
     "build": "echo \"no build step\"",
-    "start": "live-server --port=$PORT --entry-file=index.html"
+    "start": "serve -s . -l $PORT"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
   }
 }
