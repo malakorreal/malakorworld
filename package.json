@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "live-server --port=5173 --entry-file=index.html",
     "build": "echo \"no build step\"",
-    "start": "serve -s . -l $PORT"
+    "start": "npx serve -s . -l $PORT"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
