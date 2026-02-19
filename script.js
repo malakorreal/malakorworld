@@ -280,20 +280,28 @@ function initPreferences() {
 }
 
 window.addEventListener("load", () => {
+  initPreferences();
+
   const elapsed = performance.now() - startTime;
   const minimumVisible = 1200;
-  const delay = Math.max(0, minimumVisible - elapsed);
+  const remaining = Math.max(0, minimumVisible - elapsed);
 
-  setTimeout(() => {
+  const fontsReady =
+    document.fonts && document.fonts.ready
+      ? document.fonts.ready.catch(() => {})
+      : Promise.resolve();
+
+  Promise.all([
+    fontsReady,
+    new Promise((resolve) => setTimeout(resolve, remaining)),
+  ]).then(() => {
     if (preloader) {
       preloader.classList.add("preloader-hidden");
       setTimeout(() => {
         preloader.style.display = "none";
       }, 260);
     }
-  }, delay);
-
-  initPreferences();
+  });
 });
 
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
