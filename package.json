@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "live-server --port=5173 --entry-file=index.html"
+    "dev": "live-server --port=5173 --entry-file=index.html",
+    "build": "echo \"no build step\"",
+    "start": "live-server --port=$PORT --entry-file=index.html"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
   }
 }
-
