@@ -20,6 +20,7 @@ const translations = {
     heroSubtitle: "Freelance Developer, Game Developer",
     heroPrimaryCta: "ดูโปรเจค",
     heroSecondaryCta: "ติดต่อ",
+    heroScrollHint: "เลื่อนลง",
     aboutTitle: "เกี่ยวกับ",
     aboutIntro: "ยินดีที่ได้รู้จักคับ ! สวัสดีคับผมชื่อ 'เมฆ' และชื่อ ' Malakor ' เป็นแค่นามแฝงเฉยๆคับ ผมเป็น Freelance Developer และ Game Developer มือใหม่ โดยที่ผมไม่เคยมีประสบการณ์เขียนโค้ดมาก่อนและพึ่งเรื่มฝึกเมื่อปีที่แล้วเองคับ ยังไงก็ฝากตัวด้วยค้าบ",
     aboutIdentityTitle: "ตัวตน",
@@ -77,6 +78,7 @@ const translations = {
     heroSubtitle: "Freelance Developer, Game Developer",
     heroPrimaryCta: "View projects",
     heroSecondaryCta: "Contact",
+    heroScrollHint: "Scroll down",
     aboutTitle: "About",
     aboutIntro:
       "Nice to meet you! My name is Mek, and “Malakor” is just my online nickname. I'm a beginner Freelance Developer and Game Developer who only started learning to code last year, with no background before that. Please take care of me!",
