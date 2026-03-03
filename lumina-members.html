@@ -1142,9 +1142,9 @@
 
       if (!memberData.nickname || !memberData.img) return showToast("กรุณาใส่ชื่อและรูปภาพโปรไฟล์", 'error', 'Warning');
 
-      // ถ้าเป็นการแก้ไข ให้เพิ่ม id เข้าไปใน memberData
+      // ถ้าเป็นการแก้ไข ให้เพิ่ม id เข้าไปใน memberData และแปลงเป็นตัวเลข
       if (editingMemberId) {
-        memberData.id = editingMemberId;
+        memberData.id = parseInt(editingMemberId, 10);
       } else {
         // ถ้าเป็นการเพิ่มใหม่ ให้สร้าง id ใหม่
         memberData.id = Date.now(); // ใช้ timestamp เป็น id ชั่วคราว
