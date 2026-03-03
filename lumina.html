@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumina Evernight | Malakor World</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Kanit', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-yellow);
+    }
+
+    .lumina-page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: url('assets/Lumina/Background/1.png') no-repeat center center;
+      background-size: 110% 110%; /* ขยายภาพให้ใหญ่กว่าจอเล็กน้อยเพื่อรองรับ Parallax */
+      display: flex;
+      flex-direction: column;
+      transition: background-position 0.1s ease-out; /* เพิ่มความสมูทในการขยับ */
+    }
+    
+    /* Mouse Glow Effect */
+    .mouse-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(600px circle at var(--x) var(--y), rgba(255, 204, 0, 0.08), transparent 40%);
+      z-index: 1;
+    }
+
+    .lumina-header {
+      width: 100%;
+      height: 80px;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 10;
+    }
+    .lumina-nav {
+      display: flex;
+      gap: 30px;
+    }
+    .lumina-nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+    .lumina-nav a:hover {
+      opacity: 0.7;
+    }
+    .lumina-nav a.active {
+      border-bottom: 2px solid white;
+    }
+    .lumina-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .lumina-logo-container {
+      text-align: center;
+    }
+    .lumina-logo {
+      max-width: 600px; /* ขนาดโลโก้ Lumina ตามภาพ */
+    }
+    .lumina-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 5;
+    }
+    /* ปรับแต่งสำหรับ Mobile */
+    @media (max-width: 768px) {
+      .lumina-header {
+        justify-content: center;
+        padding: 0 20px;
+      }
+      .lumina-nav {
+        gap: 15px;
+      }
+      .lumina-nav a {
+        font-size: 18px;
+      }
+      .lumina-logo {
+        max-width: 80%;
+      }
+    }
+
+    /* Preloader Styles */
+    #lumina-preloader {
+      position: fixed;
+      inset: 0;
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #lumina-preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .yellow-spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(255, 204, 0, 0.1);
+      border-top: 6px solid #ffcc00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    .loading-text {
+      color: #ffcc00;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="lumina-preloader">
+    <div class="yellow-spinner"></div>
+    <p class="loading-text">กำลังโหลด</p>
+  </div>
+
+  <div class="mouse-glow" id="mouseGlow"></div>
+
+  <div class="lumina-page">
+    <header class="lumina-header">
+      <nav class="lumina-nav">
+        <a href="lumina.html" class="active">หน้าหลัก</a>
+        <a href="lumina-about.html">เกี่ยวกับ</a>
+        <a href="lumina-members.html">สมาชิก</a>
+      </nav>
+    </header>
+
+    <main class="lumina-content">
+      <div class="lumina-logo-container">
+        <img src="assets/Lumina/Logo.png" alt="Lumina Evernight" class="lumina-logo">
+        <div class="school-motto" style="color: white; font-size: 20px; margin-top: 20px; letter-spacing: 4px; font-weight: 300; opacity: 0.8;">
+          
+        </div>
+      </div>
+    </main>
+
+    <footer class="lumina-footer">
+      " © STARLIGHT / Malakor 2025 "
+    </footer>
+  </div>
+
+  <script>
+    // Smart Preloader Logic
+    (function() {
+      const startTime = Date.now();
+      const minDisplayTime = 1500; // แสดงอย่างน้อย 1.5 วินาทีเพื่อให้ Animation สวยงาม
+
+      window.addEventListener('load', () => {
+        const preloader = document.getElementById('lumina-preloader');
+        if (!preloader) return;
+
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
+
+        // รอจนกว่าทรัพยากรจะโหลดเสร็จ + แสดง Animation ให้ครบเวลาที่กำหนด
+        setTimeout(() => {
+          preloader.classList.add('hidden');
+        }, remainingTime);
+      });
+    })();
+
+    // Mouse Glow Effect
+    const mouseGlow = document.getElementById('mouseGlow');
+    window.addEventListener('mousemove', (e) => {
+      mouseGlow.style.setProperty('--x', `${e.clientX}px`);
+      mouseGlow.style.setProperty('--y', `${e.clientY}px`);
+    });
+
+    // Subtle Parallax on Background
+    const page = document.querySelector('.lumina-page');
+    window.addEventListener('mousemove', (e) => {
+      const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+      const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+      page.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
+    });
+  </script>
+</body>
+</html>

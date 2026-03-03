@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Links | Malakor World</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .links-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .links-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 5;
+    }
+    .link-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 24px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border-soft);
+      font-weight: 500;
+      color: var(--text-main);
+      transition: all var(--transition-normal);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+    .link-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      color: var(--accent-secondary);
+    }
+    .links-profile {
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 5;
+    }
+    .links-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      margin: 0 auto 20px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .links-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .links-back-home {
+      margin-top: 40px;
+      font-size: 14px;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 5;
+    }
+    .links-back-home a {
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .links-back-home a:hover {
+      opacity: 1;
+      color: var(--accent-secondary);
+    }
+    body[data-theme="dark"] .link-item {
+      background: rgba(15, 17, 24, 0.6);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f7f7f7;
+    }
+    body[data-theme="dark"] .link-item:hover {
+      border-color: var(--accent);
+      background: rgba(20, 23, 35, 0.9);
+      color: var(--accent);
+    }
+    body[data-theme="dark"] .links-avatar {
+      border-color: var(--border-soft);
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <div id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo"></div>
+      <div class="preloader-spinner">
+        <div class="preloader-ring preloader-ring-outer"></div>
+        <div class="preloader-ring preloader-ring-inner"></div>
+        <div class="preloader-orb"></div>
+      </div>
+      <p class="preloader-text">กําลังโหลด.....</p>
+    </div>
+  </div>
+
+  <div class="floating-shapes" aria-hidden="true">
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+    <span class="floating-shape"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand" data-i18n="brand">MALAKOR</div>
+      <div class="header-controls">
+        <button class="header-chip theme-toggle" id="theme-toggle" type="button">
+          <span class="theme-dot"></span>
+          <span class="theme-label" data-i18n-theme-label>โหมดมืด</span>
+        </button>
+        <button class="header-chip lang-toggle" id="lang-toggle" type="button" aria-label="เปลี่ยนภาษา">
+          <span class="lang-option lang-th">TH</span>
+          <span class="lang-divider">/</span>
+          <span class="lang-option lang-en">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="links-page hero">
+    <div class="hero-overlay"></div>
+    
+    <div class="links-profile">
+      <div class="links-avatar">
+        <img src="assets/about/main.jpg" alt="Malakor">
+      </div>
+      <h1 class="hero-title" data-i18n="linksTitle">รวมลิงก์ของ Malakor</h1>
+      <p class="hero-subtitle" data-i18n="linksSubtitle">ติดตามช่องทางต่างๆ ของผมได้ที่นี่คับ</p>
+    </div>
+
+    <div class="links-container">
+      <a href="https://guns.lol/malakorkubb" target="_blank" class="link-item">
+        <span data-i18n="linkMainContact">ติดต่อผม (Guns.lol)</span>
+      </a>
+      <a href="https://www.instagram.com/_mzikyy/" target="_blank" class="link-item">
+        <span>Instagram</span>
+      </a>
+      <a href="https://github.com/" target="_blank" class="link-item">
+        <span>GitHub</span>
+      </a>
+      <a href="https://discord.gg/" target="_blank" class="link-item">
+        <span>Discord Server</span>
+      </a>
+    </div>
+
+    <div class="links-back-home">
+      <a href="index.html" data-i18n="backHome">← กลับไปหน้าหลัก</a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

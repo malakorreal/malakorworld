@@ -417,89 +417,89 @@ body[data-theme="dark"] .nav-toggle {
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 1;
+  z-index: 0;
 }
 
 .floating-shape {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   transform-origin: center center;
-  animation: float-shape 16s linear infinite;
+  animation: float-shape 12s linear infinite;
 }
 
 .floating-shape:nth-child(1) {
   left: 6%;
-  animation-duration: 16s;
+  animation-duration: 10s;
   animation-delay: 0s;
 }
 
 .floating-shape:nth-child(2) {
   left: 20%;
-  animation-duration: 18s;
+  animation-duration: 12s;
   animation-delay: 3s;
   transform: scale(1.1);
 }
 
 .floating-shape:nth-child(3) {
   left: 35%;
-  animation-duration: 19s;
+  animation-duration: 13s;
   animation-delay: 6s;
 }
 
 .floating-shape:nth-child(4) {
   left: 50%;
-  animation-duration: 17s;
+  animation-duration: 11s;
   animation-delay: 1.5s;
   transform: scale(0.9);
 }
 
 .floating-shape:nth-child(5) {
   left: 65%;
-  animation-duration: 20s;
+  animation-duration: 14s;
   animation-delay: 4.5s;
 }
 
 .floating-shape:nth-child(6) {
   left: 78%;
-  animation-duration: 18s;
+  animation-duration: 12s;
   animation-delay: 7s;
   transform: scale(1.15);
 }
 
 .floating-shape:nth-child(7) {
   left: 90%;
-  animation-duration: 21s;
+  animation-duration: 15s;
   animation-delay: 2s;
 }
 
 .floating-shape:nth-child(8) {
   left: 40%;
-  animation-duration: 22s;
+  animation-duration: 16s;
   animation-delay: 9s;
   transform: scale(0.8);
 }
 
 @keyframes float-shape {
   0% {
-    transform: translate3d(0, 110vh, 0) rotate(-45deg);
+    transform: translate3d(0, 110vh, 0) rotate(-30deg);
     opacity: 0;
   }
   10% {
     opacity: 1;
   }
   50% {
-    transform: translate3d(0, 45vh, 0) rotate(0deg);
+    transform: translate3d(0, 50vh, 0) rotate(0deg);
     opacity: 1;
   }
   90% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(0, -20vh, 0) rotate(45deg);
+    transform: translate3d(0, -20vh, 0) rotate(30deg);
     opacity: 0;
   }
 }

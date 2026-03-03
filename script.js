@@ -67,6 +67,10 @@ const translations = {
     themeLight: "โหมดสว่าง",
     themeDark: "โหมดมืด",
     formAlert: "ฟอร์มนี้เป็นตัวอย่าง UI เท่านั้น คุณสามารถเชื่อมต่อกับระบบจริงได้ภายหลัง",
+    linksTitle: "รวมลิงก์ของ Malakor",
+    linksSubtitle: "ติดตามช่องทางต่างๆ ของผมได้ที่นี่คับ",
+    linkMainContact: "ติดต่อผม (Guns.lol)",
+    backHome: "← กลับไปหน้าหลัก",
   },
   en: {
     navHome: "Home",
@@ -130,6 +134,10 @@ const translations = {
     themeLight: "Light mode",
     themeDark: "Dark mode",
     formAlert: "This form is only demo UI. You can hook it up to a real system later.",
+    linksTitle: "Malakor's Links",
+    linksSubtitle: "Follow me on other platforms",
+    linkMainContact: "Contact Me (Guns.lol)",
+    backHome: "← Back to Home",
   },
 };
 
@@ -181,13 +189,16 @@ function getCurrentSectionId() {
     }
   });
 
+  // If we are on a page without these sections (like links.html), return null
+  if (bestDistance === Infinity) return null;
+
   return bestId;
 }
 
 function initSectionTracking() {
   const update = () => {
     const id = getCurrentSectionId();
-    setActiveSectionTitle(id);
+    if (id) setActiveSectionTitle(id);
   };
 
   window.addEventListener("scroll", update, { passive: true });
@@ -262,6 +273,12 @@ function updateLangToggleState() {
 }
 
 function initPreferences() {
+  // Check for Discord OAuth2 callback on main page and redirect if needed
+  if (window.location.hash.includes('access_token=')) {
+    window.location.href = window.location.origin + '/lumina-members.html' + window.location.hash;
+    return;
+  }
+
   const savedTheme = localStorage.getItem(STORAGE_THEME_KEY);
   const savedLang = localStorage.getItem(STORAGE_LANG_KEY);
 
@@ -283,7 +300,7 @@ window.addEventListener("load", () => {
   initPreferences();
 
   const elapsed = performance.now() - startTime;
-  const minimumVisible = 1200;
+  const minimumVisible = 2200;
   const remaining = Math.max(0, minimumVisible - elapsed);
 
   const fontsReady =

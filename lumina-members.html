@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members | Lumina Evernight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --primary-yellow: #ffcc00;
+      --bg-dark: #0a0a0a;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: white;
+      min-height: 100vh;
+    }
+
+    /* Header & Nav (Synced with lumina.html) */
+    .lumina-header {
+      width: 100%;
+      height: 80px;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-right { display: flex; align-items: center; gap: 30px; }
+    .lumina-nav { display: flex; gap: 30px; }
+    .lumina-nav a { 
+      color: white; 
+      text-decoration: none; 
+      font-size: 24px; 
+      font-weight: 400; 
+      transition: opacity 0.2s; 
+    }
+    .lumina-nav a:hover { opacity: 0.7; }
+    .lumina-nav a.active { border-bottom: 2px solid white; }
+
+    /* Discord Login & User UI (Synced with header) */
+    .discord-btn {
+      background: #5865F2;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .user-profile { display: none; align-items: center; gap: 12px; font-size: 14px; }
+    .user-profile img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--primary-yellow); }
+    .admin-badge { background: var(--primary-yellow); color: black; font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+
+    /* Main Container */
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .page-header { text-align: center; margin-bottom: 50px; position: relative; }
+    .page-header h1 { font-size: 42px; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 10px; }
+    .page-header h1::before, .page-header h1::after { content: "—"; color: var(--primary-yellow); margin: 0 15px; opacity: 0.5; }
+
+    /* Control Bar */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px 25px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border-color);
+    }
+    .search-box input {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      color: white;
+      border-radius: 4px;
+      width: 300px;
+      font-family: inherit;
+    }
+    .admin-only { display: none; gap: 10px; }
+
+    /* Members Grid */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 30px;
+    }
+    .member-card {
+      background: var(--card-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .member-card:hover { transform: translateY(-8px); border-color: var(--primary-yellow); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.1); }
+    .avatar-wrap { width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+    .member-info-mini { padding: 15px; text-align: center; background: rgba(0,0,0,0.4); }
+    .member-info-mini h3 { font-size: 16px; font-weight: 500; }
+
+    /* Profile Modal (Redesigned) */
+    .modal-full {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .profile-detail-container {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #161616, #0a0a0a);
+      border: 1px solid rgba(255, 204, 0, 0.2);
+      display: flex;
+      min-height: 650px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .profile-left { 
+      flex: 0 0 450px; 
+      background: #000; 
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-left img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      image-rendering: auto; /* เปลี่ยนจาก pixelated เป็นปกติเพื่อให้ดูพรีเมียมขึ้น */
+      transition: transform 0.5s ease;
+    }
+    .profile-left:hover img { transform: scale(1.05); }
+    
+    .profile-right { 
+      flex: 1; 
+      padding: 50px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 35px;
+      background-image: radial-gradient(circle at top right, rgba(255, 204, 0, 0.05), transparent 300px);
+    }
+    
+    .info-section h2 { 
+      font-size: 14px; 
+      text-transform: uppercase; 
+      color: var(--primary-yellow);
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-section h2::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 204, 0, 0.3), transparent);
+    }
+
+    .info-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 25px; 
+    }
+    .info-item {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .info-item label { 
+      display: block; 
+      color: #666; 
+      font-size: 11px; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px; 
+    }
+    .info-item span { 
+      display: block; 
+      font-size: 18px; 
+      font-weight: 500; 
+      color: #eee;
+    }
+    
+    .description-box {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 30px;
+      border-radius: 16px;
+      border-left: 4px solid var(--primary-yellow);
+    }
+    .description-text { 
+      line-height: 1.8; 
+      color: #bbb; 
+      font-size: 15px; 
+      font-weight: 300;
+    }
+
+    .close-modal { 
+      position: absolute; 
+      top: 25px; 
+      right: 30px; 
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px; 
+      cursor: pointer; 
+      color: #888; 
+      transition: all 0.2s; 
+      z-index: 10; 
+    }
+    .close-modal:hover { 
+      background: #ff3333; 
+      color: white; 
+      transform: rotate(90deg);
+    }
+
+    /* Responsive Profile */
+    @media (max-width: 900px) {
+      .profile-detail-container { flex-direction: column; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+      .profile-left { flex: 0 0 350px; }
+      .info-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Admin Add Modal */
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-form {
+      background: #1a1a1a;
+      padding: 40px;
+      border-radius: 8px;
+      width: 500px;
+      border: 1px solid var(--primary-yellow);
+    }
+    .admin-form h2 { color: var(--primary-yellow); margin-bottom: 20px; }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { display: block; color: #888; font-size: 12px; margin-bottom: 5px; }
+    .input-group input, .input-group textarea {
+      width: 100%;
+      background: #000;
+      border: 1px solid #333;
+      padding: 10px;
+      color: white;
+      font-family: inherit;
+    }
+    .form-btns { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-save { 
+      background: var(--primary-yellow); 
+      color: black; 
+      flex: 1; 
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-cancel { 
+      background: #222; 
+      color: white; 
+      flex: 1; 
+      border: 1px solid #444;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-save:hover, .btn-cancel:hover { opacity: 0.8; }
+    
+    /* Edit mode delete btn */
+    .delete-overlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff3333;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 5;
+    }
+    .is-admin .edit-mode .delete-overlay { display: flex; }
+    
+    .edit-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--primary-yellow);
+      color: black;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 5;
+      cursor: pointer;
+    }
+    .is-admin .edit-mode .edit-overlay { display: flex; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-yellow);
+    }
+    
+    /* Admin Control Buttons */
+    .admin-only .btn {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    .admin-only .btn-save {
+      background: var(--primary-yellow);
+      color: black;
+      border: 1px solid var(--primary-yellow);
+    }
+    .admin-only .btn-cancel {
+      background: transparent;
+      color: white;
+      border: 1px solid #444;
+    }
+    .admin-only .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: rgba(20, 20, 20, 0.95);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      border-left: 4px solid var(--primary-yellow);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 300px;
+      transform: translateX(120%);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      backdrop-filter: blur(10px);
+    }
+    .toast.show { transform: translateX(0); }
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--primary-yellow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .toast-content { flex: 1; }
+    .toast-title { font-size: 14px; font-weight: 600; color: var(--primary-yellow); margin-bottom: 2px; }
+    .toast-msg { font-size: 13px; opacity: 0.9; }
+    .toast.error { border-left-color: #ff3333; }
+    .toast.error .toast-icon { background: #ff3333; color: white; }
+    .toast.error .toast-title { color: #ff3333; }
+
+    /* Auth Loading Overlay */
+    .auth-loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 10000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .auth-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 204, 0, 0.1);
+      border-top-color: var(--primary-yellow);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .lumina-footer {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.5;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    /* Full-page Preloader */
+    #lumina-preloader {
+      position: fixed;
+      inset: 0;
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #lumina-preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .yellow-spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(255, 204, 0, 0.1);
+      border-top: 6px solid #ffcc00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    .loading-text {
+      color: #ffcc00;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="lumina-preloader">
+    <div class="yellow-spinner"></div>
+    <p class="loading-text">กำลังโหลด</p>
+  </div>
+
+  <div class="auth-loading-overlay" id="authLoading">
+    <div class="auth-spinner"></div>
+    <p style="color: var(--primary-yellow); font-size: 14px; letter-spacing: 2px;">กำลังตรวจสอบสิทธิ์...</p>
+  </div>
+  <div class="toast-container" id="toastContainer"></div>
+  <header class="lumina-header">
+    <div class="header-right">
+      <nav class="lumina-nav">
+        <a href="lumina.html">หน้าหลัก</a>
+        <a href="lumina-about.html">เกี่ยวกับ</a>
+        <a href="lumina-members.html" class="active">สมาชิก</a>
+      </nav>
+      <button class="discord-btn" id="loginBtn">
+        <span>Login with Discord</span>
+      </button>
+      <div class="user-profile" id="userProfile">
+        <span class="admin-badge" id="adminBadge">ADMIN</span>
+        <img src="" id="userAvatar" alt="User">
+        <span id="userName">Username</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>MEMBERS</h1>
+      <p>รายชื่อสมาชิก Lumina Evernight</p>
+    </div>
+
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ค้นหาชื่อสมาชิก...">
+      </div>
+      <div class="admin-only" id="adminControls">
+        <button class="btn btn-save" id="addMemberBtn">เพิ่มสมาชิกใหม่</button>
+        <button class="btn btn-cancel" id="toggleEditBtn">จัดการรายชื่อ</button>
+      </div>
+    </div>
+
+    <div class="members-grid" id="membersGrid"></div>
+  </div>
+
+  <footer class="lumina-footer">
+    " © STARLIGHT / Malakor 2025 "
+  </footer>
+
+  <!-- Profile Detail Modal -->
+  <div class="modal-full" id="profileModal">
+    <span class="close-modal" onclick="closeProfile()">&times;</span>
+    <div class="profile-detail-container">
+      <div class="profile-left">
+        <img id="detailImg" src="" alt="Avatar">
+      </div>
+      <div class="profile-right">
+        <div class="info-section">
+          <h2>INFO</h2>
+          <div class="info-grid">
+            <div class="info-item"><label>ชื่อจริง</label><span id="detailRealName">-</span></div>
+            <div class="info-item"><label>ชื่อเล่น</label><span id="detailNickName">-</span></div>
+            <div class="info-item"><label>อายุ</label><span id="detailAge">-</span></div>
+            <div class="info-item"><label>อยู่ชั้น</label><span id="detailGrade">-</span></div>
+            <div class="info-item"><label>บ้าน</label><span id="detailRank">-</span></div>
+            <div class="info-item"><label>สถานะ</label><span id="detailStatus">-</span></div>
+          </div>
+        </div>
+        <div class="info-section">
+          <h2>DESCRIPTION</h2>
+          <div class="description-box">
+            <p class="description-text" id="detailDesc"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Add/Edit Modal -->
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-form">
+      <h2 id="modalTitle">เพิ่มสมาชิก</h2>
+      <div class="input-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="input-group"><label>ชื่อเล่น (แสดงหน้าแรก)</label><input type="text" id="fNick"></div>
+        <div class="input-group"><label>ชื่อจริง</label><input type="text" id="fReal"></div>
+        <div class="input-group"><label>อายุ</label><input type="text" id="fAge"></div>
+        <div class="input-group"><label>ชั้นปี</label><input type="text" id="fGrade"></div>
+        <div class="input-group"><label>บ้าน</label><input type="text" id="fRank"></div>
+        <div class="input-group"><label>สถานะ</label><input type="text" id="fStatus"></div>
+      </div>
+      <div class="input-group" style="margin-top: 15px;"><label>URL รูปโปรไฟล์ (แสดงในหน้าสมาชิก)</label><input type="text" id="fImg"></div>
+      <div class="input-group"><label>URL รูปตัวละครเต็ม (แสดงในหน้า Profile)</label><input type="text" id="fFullImg"></div>
+      <div class="input-group"><label>คำอธิบายตัวละคร</label><textarea id="fDesc" rows="5"></textarea></div>
+      <div class="input-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+        <input type="checkbox" id="fLock" style="width: 20px; height: 20px; cursor: pointer;">
+        <label style="margin: 0; color: var(--primary-yellow); cursor: pointer;" for="fLock">ล็อกสตอรี่ (ไม่ให้คนทั่วไปเห็น)</label>
+      </div>
+      <div class="input-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+        <div class="input-group"><label>YouTube URL</label><input type="text" id="fYoutube" placeholder="https://youtube.com/..."></div>
+        <div class="input-group"><label>Instagram URL</label><input type="text" id="fIg" placeholder="https://instagram.com/..."></div>
+        <div class="input-group"><label>Facebook URL</label><input type="text" id="fFb" placeholder="https://facebook.com/..."></div>
+      </div>
+      <div class="form-btns">
+        <button class="btn btn-save" onclick="saveMember()">บันทึกข้อมูล</button>
+        <button class="btn btn-cancel" onclick="closeAdminModal()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const DISCORD_CLIENT_ID = '1432203667829821450'; 
+    const ADMIN_API_URL = 'https://api.npoint.io/6d71db871d844b9ec40f';
+    
+    // Cloud Database (Supabase)
+    const SUPABASE_URL = 'https://zspygbnnxpfsoxbihaqm.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzcHlnYm5ueHBmc294YmloYXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDUzMDMsImV4cCI6MjA4NzY4MTMwM30.JcBKs6CjyJGyCZSNGgTM_7eLLSivlJsreWGiFoa4P_A';
+
+    // Initialize Supabase Client for Realtime
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Setup Realtime Listener
+    function setupRealtime() {
+      supabaseClient
+        .channel('public:members')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'members' }, payload => {
+          console.log('Realtime Update Received:', payload);
+          // เมื่อมีการเปลี่ยนแปลง (Insert, Update, Delete) ให้ดึงข้อมูลใหม่ทันที
+          fetchMembersFromCloud();
+        })
+        .subscribe();
+    }
+
+    // Auto-detect Redirect URI based on current page
+    const REDIRECT_URI = window.location.origin + window.location.pathname;
+
+    // Data Structure & Management
+    let members = []; 
+
+    // ดึงข้อมูลจาก Cloud (Supabase)
+    async function fetchMembersFromCloud() {
+      const authLoading = document.getElementById('authLoading');
+      const loadingText = authLoading?.querySelector('p');
+      const startTime = Date.now();
+      const minDisplayTime = 1200; // ลดเวลาขั้นต่ำลงเพื่อความเร็ว
+      
+      try {
+        if (authLoading) {
+          loadingText.textContent = 'กำลังโหลดข้อมูลจากเซิร์ฟเวอร์...';
+          authLoading.style.display = 'flex';
+        }
+
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/members?select=*`, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        
+        if (!response.ok) throw new Error('Fetch failed');
+        
+        members = await response.json();
+        renderMembers(); // Render ทันทีเพื่อให้ Browser เริ่มโหลดรูปใน DOM
+        
+      } catch (error) {
+        console.error('Fetch Error:', error);
+        showToast('ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์ได้', 'error', 'Error');
+        members = [];
+        renderMembers();
+      } finally {
+        if (authLoading) authLoading.style.display = 'none';
+        
+        // ตรวจสอบเวลาที่แสดงไปแล้ว และคำนวณเวลาที่เหลือ
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
+
+        setTimeout(() => {
+          const preloader = document.getElementById('lumina-preloader');
+          if (preloader) preloader.classList.add('hidden');
+        }, remainingTime);
+      }
+    }
+
+    // บันทึกข้อมูลลง Cloud (Supabase)
+    async function saveMembersToCloud(updatedMembers, actionType = 'upsert', targetId = null) {
+      const authLoading = document.getElementById('authLoading');
+      const loadingText = authLoading?.querySelector('p');
+      
+      try {
+        if (authLoading) {
+          loadingText.textContent = 'กำลังซิงก์ข้อมูลกับเซิร์ฟเวอร์...';
+          authLoading.style.display = 'flex';
+        }
+
+        let response;
+        if (actionType === 'delete') {
+          // กรณีลบสมาชิก
+          response = await fetch(`${SUPABASE_URL}/rest/v1/members?id=eq.${targetId}`, {
+            method: 'DELETE',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          });
+        } else {
+          // กรณีเพิ่มหรือแก้ไข (ใช้ Upsert)
+          // หมายเหตุ: updatedMembers ในที่นี้คืออาเรย์ แต่ Supabase upsert ต้องการข้อมูลแถวที่จะอัปเดต
+          // เพื่อให้ง่ายที่สุด เราจะส่งเฉพาะตัวที่กำลังแก้หรือเพิ่มไปครับ
+          const memberToSave = actionType === 'edit' 
+            ? updatedMembers.find(m => m.id === targetId)
+            : updatedMembers[updatedMembers.length - 1];
+
+          response = await fetch(`${SUPABASE_URL}/rest/v1/members`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(memberToSave)
+          });
+        }
+        
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.message || 'Server error');
+        }
+        
+        return true;
+      } catch (error) {
+        console.error('Save Error:', error);
+        showToast(`Error: ${error.message}`, 'error', 'Error');
+        return false;
+      } finally {
+        if (authLoading) authLoading.style.display = 'none';
+      }
+    }
+
+    let currentUser = JSON.parse(localStorage.getItem('lumina_user')) || null;
+    let isEditMode = false;
+    let editingMemberId = null;
+
+    // Toast System
+    function showToast(msg, type = 'success', title = 'Notification') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-icon">${type === 'success' ? '✓' : '!'}</div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-msg">${msg}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      
+      // Force reflow
+      toast.offsetHeight;
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+      }, 4000);
+    }
+
+    // Elements
+    const loginBtn = document.getElementById('loginBtn');
+    const userProfile = document.getElementById('userProfile');
+    const adminControls = document.getElementById('adminControls');
+
+    // --- Discord OAuth2 Logic ---
+
+    // ตรวจสอบสิทธิ์ Admin แบบ Real-time ทุกครั้งที่โหลดหน้า
+    async function checkAdminStatusRealtime() {
+      if (!currentUser) return;
+      
+      try {
+        // เพิ่ม timestamp เพื่อป้องกัน Browser จำค่าเก่า (Cache-busting)
+        const response = await fetch(`${ADMIN_API_URL}?t=${Date.now()}`);
+        if (!response.ok) return;
+        
+        const adminIds = await response.json();
+        const isAdmin = adminIds.includes(currentUser.id);
+        const newRole = isAdmin ? 'ADMIN' : 'USER';
+
+        // ถ้าสิทธิ์เปลี่ยนไปจากเดิม ให้ทำการอัปเดต UI และ LocalStorage ทันที
+        if (currentUser.role !== newRole) {
+          currentUser.role = newRole;
+          localStorage.setItem('lumina_user', JSON.stringify(currentUser));
+          updateAuthUI();
+          
+          if (newRole === 'USER') {
+            showToast('สิทธิ์ Admin ของคุณถูกยกเลิกแล้ว', 'error', 'System Update');
+          } else {
+            showToast('คุณได้รับสิทธิ์ Admin แล้ว!', 'success', 'System Update');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to verify admin status:', error);
+      }
+    }
+
+    loginBtn.onclick = () => {
+      if (DISCORD_CLIENT_ID === 'YOUR_DISCORD_CLIENT_ID') {
+        showToast('กรุณาตั้งค่า DISCORD_CLIENT_ID ในไฟล์ lumina-members.html ก่อนใช้งานครับ', 'error', 'Error');
+        return;
+      }
+      const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+      window.location.href = authUrl;
+    };
+
+    async function handleAuthCallback() {
+      const fragment = new URLSearchParams(window.location.hash.slice(1));
+      const query = new URLSearchParams(window.location.search);
+      const accessToken = fragment.get('access_token') || query.get('access_token');
+
+      if (accessToken) {
+        document.getElementById('authLoading').style.display = 'flex';
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        try {
+          // ดึงข้อมูลแบบขนาน (Parallel) เพื่อความรวดเร็ว
+          const [userRes, adminRes] = await Promise.all([
+            fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${accessToken}` } }),
+            fetch(`${ADMIN_API_URL}?t=${Date.now()}`)
+          ]);
+
+          if (!userRes.ok) throw new Error('Discord Auth Failed');
+          
+          const discordUser = await userRes.json();
+          const adminIds = await adminRes.json();
+
+          const isAdmin = adminIds.includes(discordUser.id);
+
+          currentUser = {
+            id: discordUser.id,
+            name: discordUser.global_name || discordUser.username,
+            avatar: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`,
+            role: isAdmin ? 'ADMIN' : 'USER'
+          };
+
+          localStorage.setItem('lumina_user', JSON.stringify(currentUser));
+          updateAuthUI();
+          
+          showToast(
+            isAdmin ? `ยินดีต้อนรับ Admin ${currentUser.name}!` : `เข้าสู่ระบบสำเร็จในฐานะสมาชิกทั่วไป`,
+            'success',
+            isAdmin ? 'Admin Login' : 'Login'
+          );
+
+        } catch (error) {
+          console.error('Login Error:', error);
+          showToast('เกิดข้อผิดพลาดในการดึงข้อมูลจาก Discord หรือ API', 'error', 'Error');
+        } finally {
+          document.getElementById('authLoading').style.display = 'none';
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('lumina_user');
+      currentUser = null;
+      window.location.reload();
+    }
+
+    function updateAuthUI() {
+      if (currentUser) {
+        loginBtn.style.display = 'none';
+        userProfile.style.display = 'flex';
+        userProfile.style.cursor = 'pointer';
+        userProfile.title = 'คลิกเพื่อ Logout';
+        userProfile.onclick = () => { if(confirm('ต้องการ Logout ใช่หรือไม่?')) logout(); };
+        
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userAvatar').src = currentUser.avatar;
+        
+        if (currentUser.role === 'ADMIN') {
+          adminControls.style.display = 'flex';
+          document.getElementById('adminBadge').style.display = 'block';
+          document.body.classList.add('is-admin');
+        } else {
+          adminControls.style.display = 'none';
+          document.getElementById('adminBadge').style.display = 'none';
+          document.body.classList.remove('is-admin');
+        }
+      }
+    }
+
+    // --- End Discord OAuth2 Logic ---
+
+    // Rendering
+    function renderMembers(filter = '') {
+      const grid = document.getElementById('membersGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      
+      // เพิ่มการตรวจสอบว่า members เป็น array และมีข้อมูล nickname/realname ก่อนใช้ includes
+      const filtered = members.filter(m => {
+        if (!m) return false;
+        const nick = (m.nickname || '').toLowerCase();
+        const real = (m.realname || '').toLowerCase();
+        const search = filter.toLowerCase();
+        return nick.includes(search) || real.includes(search);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; opacity: 0.5;">ไม่พบรายชื่อสมาชิก</div>';
+        return;
+      }
+
+      filtered.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'member-card';
+        card.innerHTML = `
+          <div class="edit-overlay" onclick="openAdminModal(true, ${m.id})">✎</div>
+          <div class="delete-overlay" onclick="deleteMember(event, ${m.id})">&times;</div>
+          <div class="avatar-wrap" onclick="openProfile(${m.id})">
+            <img src="${m.img || 'assets/placeholder.png'}" alt="${m.nickname || 'Member'}">
+          </div>
+          <div class="member-info-mini" onclick="openProfile(${m.id})">
+            <h3>${m.nickname || 'Unknown'}</h3>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Search
+    document.getElementById('searchInput').oninput = (e) => renderMembers(e.target.value);
+
+    // Profile Detail
+    function openProfile(id) {
+      if (isEditMode) return;
+      window.location.href = `lumina-profile.html?id=${id}`;
+    }
+
+    function closeProfile() {
+      document.getElementById('profileModal').style.display = 'none';
+    }
+
+    // Admin Actions
+    function openAdminModal(isEdit = false, id = null) {
+      editingMemberId = isEdit ? id : null;
+      document.getElementById('modalTitle').textContent = isEdit ? 'แก้ไขข้อมูลสมาชิก' : 'เพิ่มสมาชิกใหม่';
+      
+      if (isEdit) {
+        const m = members.find(item => item.id === id);
+        if (m) {
+          document.getElementById('fNick').value = m.nickname;
+          document.getElementById('fReal').value = m.realname;
+          document.getElementById('fAge').value = m.age;
+          document.getElementById('fGrade').value = m.grade;
+          document.getElementById('fRank').value = m.rank;
+          document.getElementById('fStatus').value = m.status;
+          document.getElementById('fImg').value = m.img;
+          document.getElementById('fFullImg').value = m.fullImg || '';
+          document.getElementById('fDesc').value = m.desc || '';
+          document.getElementById('fLock').checked = m.isLocked || false;
+          document.getElementById('fYoutube').value = m.social?.youtube || '';
+          document.getElementById('fIg').value = m.social?.instagram || '';
+          document.getElementById('fFb').value = m.social?.facebook || '';
+        }
+      } else {
+        ['fNick','fReal','fAge','fGrade','fRank','fStatus','fImg','fFullImg','fDesc','fYoutube','fIg','fFb'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('fLock').checked = false;
+      }
+
+      document.getElementById('adminModal').style.display = 'flex';
+    }
+
+    document.getElementById('addMemberBtn').onclick = () => openAdminModal(false);
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+      editingMemberId = null;
+    }
+
+    async function saveMember() {
+      const memberData = {
+        nickname: document.getElementById('fNick').value,
+        realname: document.getElementById('fReal').value,
+        age: document.getElementById('fAge').value,
+        grade: document.getElementById('fGrade').value,
+        rank: document.getElementById('fRank').value,
+        status: document.getElementById('fStatus').value,
+        img: document.getElementById('fImg').value,
+        fullImg: document.getElementById('fFullImg').value,
+        desc: document.getElementById('fDesc').value,
+        isLocked: document.getElementById('fLock').checked,
+        social: {
+          youtube: document.getElementById('fYoutube').value,
+          instagram: document.getElementById('fIg').value,
+          facebook: document.getElementById('fFb').value
+        }
+      };
+
+      if (!memberData.nickname || !memberData.img) return showToast("กรุณาใส่ชื่อและรูปภาพโปรไฟล์", 'error', 'Warning');
+
+      let updatedMembers = [...members];
+
+      if (editingMemberId) {
+        // Mode Edit
+        const index = updatedMembers.findIndex(m => m.id === editingMemberId);
+        if (index !== -1) {
+          updatedMembers[index] = { ...updatedMembers[index], ...memberData };
+        }
+      } else {
+        // Mode Add
+        const newM = { id: Date.now(), ...memberData };
+        updatedMembers.push(newM);
+      }
+
+      // บันทึกทั้งหมดลง Cloud
+      const success = await saveMembersToCloud(updatedMembers, editingMemberId ? 'edit' : 'add', editingMemberId);
+      
+      if (success) {
+        showToast(editingMemberId ? "แก้ไขข้อมูลสำเร็จ" : "เพิ่มสมาชิกใหม่สำเร็จ", 'success', 'Success');
+        members = updatedMembers;
+        renderMembers();
+        closeAdminModal();
+      } else {
+        showToast("ไม่สามารถบันทึกลง Cloud ได้ โปรดตรวจสอบอินเทอร์เน็ต", 'error', 'Cloud Error');
+      }
+    }
+
+    async function deleteMember(e, id) {
+      e.stopPropagation();
+      if (confirm('ต้องการลบสมาชิกคนนี้ใช่หรือไม่?')) {
+        const updatedMembers = members.filter(m => m.id !== id);
+        const success = await saveMembersToCloud(updatedMembers, 'delete', id);
+        
+        if (success) {
+          showToast("ลบข้อมูลเรียบร้อยแล้ว", 'success', 'Success');
+          members = updatedMembers;
+          renderMembers();
+        } else {
+          showToast("ไม่สามารถลบข้อมูลใน Cloud ได้", 'error', 'Cloud Error');
+        }
+      }
+    }
+
+    document.getElementById('toggleEditBtn').onclick = function() {
+      isEditMode = !isEditMode;
+      this.textContent = isEditMode ? 'ยกเลิกการจัดการ' : 'จัดการรายชื่อ';
+      document.getElementById('membersGrid').classList.toggle('edit-mode');
+    };
+
+    // Init
+    handleAuthCallback();
+    updateAuthUI();
+    fetchMembersFromCloud();
+    checkAdminStatusRealtime();
+    setupRealtime(); // เริ่มการทำงานของ Realtime Listener
+    
+    // ตรวจสอบสิทธิ์ซ้ำทุกๆ 30 วินาทีเพื่อให้เป็น Real-time ตลอดเวลา
+    setInterval(checkAdminStatusRealtime, 30000);
+  </script>
+</body>
+</html>
