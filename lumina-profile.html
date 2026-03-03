@@ -331,6 +331,7 @@
       justify-content: center;
       z-index: 9999;
       transition: opacity 0.5s ease, visibility 0.5s ease;
+      text-align: center;
     }
     #lumina-preloader.hidden {
       opacity: 0;
@@ -345,16 +346,15 @@
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text {
       color: #ffcc00;
       font-size: 20px;
       font-weight: 400;
       letter-spacing: 4px;
       text-transform: uppercase;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      margin: 0;
+      width: 100%;
     }
   </style>
 </head>
