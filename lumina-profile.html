@@ -8,6 +8,9 @@
   <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Social Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Supabase JS Library -->
   <style>
     :root {
       --primary-yellow: #ffcc00;
@@ -79,11 +82,15 @@
     }
 
     .info-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 40px;
       border-radius: 20px;
+      border: 1px solid var(--border-color);
       backdrop-filter: blur(10px);
+    }
+    @keyframes shiftGradient {
+      0% { background-position: 200% 0%; }
+      100% { background-position: -200% 0%; }
     }
 
     .info-card h2 {
@@ -113,33 +120,67 @@
     .social-btns {
       display: flex;
       gap: 15px;
-      margin-top: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
     }
     .social-btn {
-      padding: 12px 24px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: all 0.2s;
-      border: 1px solid var(--border-color);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(5px);
     }
-    .social-btn.youtube { background: #FF0000; color: white; border: none; }
-    .social-btn.ig { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); color: white; border: none; }
-    .social-btn.fb { background: #1877F2; color: white; border: none; }
-    .social-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+    .social-btn i {
+      font-size: 20px;
+    }
+    .social-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .social-btn.yt:hover {
+      background: rgba(255, 0, 0, 0.15);
+      border-color: #ff0000;
+      color: #ff0000;
+    }
+    .social-btn.ig:hover {
+      background: rgba(225, 48, 108, 0.15);
+      border-color: #e1306c;
+      color: #e1306c;
+    }
+    .social-btn.fb:hover {
+      background: rgba(24, 119, 242, 0.15);
+      border-color: #1877f2;
+      color: #1877f2;
+    }
 
     .back-btn {
-      color: var(--primary-yellow);
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
-      font-size: 18px;
+      margin-top: 40px;
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .back-btn:hover {
+      background: var(--primary-yellow);
+      color: black;
+      border-color: var(--primary-yellow);
+      transform: translateX(-5px);
     }
 
     @media (max-width: 900px) {
@@ -160,6 +201,15 @@
       opacity: 0.5;
       z-index: 1000;
       pointer-events: none;
+    }
+
+    .animated-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.3), transparent);
+      background-size: 200% 100%;
+      animation: shiftGradient 5s linear infinite;
+      margin: 40px 0;
     }
 
     /* Full-page Preloader */
@@ -220,7 +270,9 @@
     </div>
     
     <div class="profile-details">
-      <a href="lumina-members.html" class="back-btn">← ย้อนกลับไปหน้ารายชื่อ</a>
+      <a href="lumina-members.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> ย้อนกลับ
+      </a>
       
       <div class="info-card">
         <h2 id="pNick">Nickname</h2>
@@ -295,7 +347,7 @@
             🔒 LOCK
           </div>`;
         } else {
-          descBox.textContent = member.description || 'ไม่มีข้อมูลคำอธิบาย';
+          descBox.textContent = member.desc || member.description || 'ไม่มีข้อมูลคำอธิบาย';
         }
 
         // Social Buttons
@@ -303,13 +355,19 @@
         socialContainer.innerHTML = '';
         if (member.social) {
           if (member.social.youtube) {
-            socialContainer.innerHTML += `<a href="${member.social.youtube}" target="_blank" class="social-btn yt">YouTube</a>`;
+            socialContainer.innerHTML += `<a href="${member.social.youtube}" target="_blank" class="social-btn yt">
+              <i class="fab fa-youtube"></i> YouTube
+            </a>`;
           }
           if (member.social.instagram) {
-            socialContainer.innerHTML += `<a href="${member.social.instagram}" target="_blank" class="social-btn ig">Instagram</a>`;
+            socialContainer.innerHTML += `<a href="${member.social.instagram}" target="_blank" class="social-btn ig">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>`;
           }
           if (member.social.facebook) {
-            socialContainer.innerHTML += `<a href="${member.social.facebook}" target="_blank" class="social-btn fb">Facebook</a>`;
+            socialContainer.innerHTML += `<a href="${member.social.facebook}" target="_blank" class="social-btn fb">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>`;
           }
         }
       } catch (error) {
