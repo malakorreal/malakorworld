@@ -801,7 +801,7 @@
     }
 
     // บันทึกข้อมูลลง Cloud (Supabase)
-    async function saveMembersToCloud(memberObject) { // รับ memberObject โดยตรง
+    async function saveMembersToCloud(memberObject, isUpdate = false) {
       const authLoading = document.getElementById('authLoading');
       const loadingText = authLoading?.querySelector('p');
       
@@ -811,16 +811,32 @@
           authLoading.style.display = 'flex';
         }
 
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/members`, {
-          method: 'POST', // POST พร้อม Prefer: merge-duplicates จะจัดการทั้ง Insert และ Update
-          headers: { 
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Prefer': 'resolution=merge-duplicates' // สำคัญ: สำหรับ Upsert (อัปเดตถ้ามี id, เพิ่มใหม่ถ้าไม่มี)
-          },
-          body: JSON.stringify(memberObject) // ส่งข้อมูลสมาชิก Object เดียว
-        });
+        let response;
+        if (isUpdate && memberObject.id) {
+          // ถ้าเป็นการอัปเดตข้อมูลเดิม
+          response = await fetch(`${SUPABASE_URL}/rest/v1/members?id=eq.${memberObject.id}`, {
+            method: 'PATCH', // ใช้ PATCH สำหรับการอัปเดต
+            headers: { 
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: JSON.stringify(memberObject)
+          });
+        } else {
+          // ถ้าเป็นการเพิ่มข้อมูลใหม่
+          // ลบ id ออกก่อนส่ง เพราะ Supabase จะสร้าง id ให้อัตโนมัติ
+          const { id, ...newMemberObject } = memberObject; 
+          response = await fetch(`${SUPABASE_URL}/rest/v1/members`, {
+            method: 'POST', // ใช้ POST สำหรับการเพิ่มใหม่
+            headers: { 
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            },
+            body: JSON.stringify(newMemberObject)
+          });
+        }
         
         if (!response.ok) {
           const err = await response.json();
@@ -1151,7 +1167,7 @@
       }
 
       // บันทึกข้อมูลสมาชิก (จะ Upsert โดยใช้ id)
-      const success = await saveMembersToCloud(memberData);
+      const success = await saveMembersToCloud(memberData, !!editingMemberId); // ส่ง true ถ้าเป็นการแก้ไข
       
       if (success) {
         showToast(editingMemberId ? "แก้ไขข้อมูลสำเร็จ" : "เพิ่มสมาชิกใหม่สำเร็จ", 'success', 'Success');
