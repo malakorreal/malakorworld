@@ -1,3 +1,8 @@
 {
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/lumina/.*", "status": 404, "dest": "/404.html" },
+    { "src": "/.*", "status": 404, "dest": "/malakor-404.html" }
+  ]
 }
