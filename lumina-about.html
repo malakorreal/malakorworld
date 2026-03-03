@@ -313,49 +313,57 @@
 
     @media (max-width: 900px) {
       section {
-        padding: 0 5%; /* ลด Padding ด้านข้างเพื่อให้เนื้อหาขยายได้มากขึ้น */
+        padding: 0 20px; /* ลด Padding ด้านข้างให้เหลือแค่ 20px */
       }
       .content-box {
         grid-template-areas: 
           "title"
           "desc"
           "image";
-        grid-template-columns: 1fr;
+        grid-template-columns: 100%; /* บังคับให้เป็น 100% ของหน้าจอ */
         text-align: center;
-        padding-top: 60px; /* ลดระยะด้านบนเล็กน้อย */
-        gap: 20px; /* ลดช่องว่างระหว่างองค์ประกอบ */
+        padding-top: 60px;
+        gap: 15px;
+        width: 100%; /* ให้ Content Box กว้างเต็มที่ */
       }
       .section-title-wrap { 
         text-align: center; 
-        transform: translateY(30px); /* เปลี่ยนเป็นเลื่อนขึ้นแทนเลื่อนข้าง */
+        transform: translateY(20px);
+        width: 100%;
       }
       .section-desc-wrap {
-        transform: translateY(30px);
+        transform: translateY(20px);
         text-align: center;
+        width: 100%;
+        padding: 0;
       }
       h1 { 
-        font-size: 36px; /* ปรับขนาดให้พอดีหน้าจอ */
+        font-size: 32px; 
         letter-spacing: 2px;
+        width: 100%;
       }
       .school-motto {
         font-size: 14px !important;
-        margin-top: 10px !important;
+        margin-top: 5px !important;
+        width: 100%;
       }
       p { 
         font-size: 16px; 
         line-height: 1.6;
-        word-break: keep-all; /* ป้องกันการตัดคำที่ทำให้อ่านยาก */
-        padding: 0 10px;
+        word-break: normal; /* คืนค่าการตัดคำแบบปกติ */
+        padding: 0;
+        width: 100%;
+        display: block;
       }
       .section-image-wrap { 
-        height: 200px; 
+        height: 180px; 
         margin-top: 10px;
+        width: 100%;
       }
       .lumina-header { justify-content: space-between; padding: 0 20px; }
       .lumina-nav { display: none; }
       .mobile-nav-toggle { display: block; }
       
-      /* ปรับปรุง Scroll Hint บนมือถือ */
       .scroll-hint {
         bottom: 10px;
         font-size: 10px;
