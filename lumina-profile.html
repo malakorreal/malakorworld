@@ -22,12 +22,16 @@
     body {
       font-family: 'Kanit', sans-serif;
       background-color: var(--bg-dark);
-      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 40px 40px;
+      background-attachment: fixed;
       color: white;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     /* Custom Scrollbar */
@@ -67,7 +71,7 @@
       width: 100%;
       max-width: 500px;
       height: 600px;
-      background: #111;
+      background: transparent; /* เปลี่ยนเป็นโปร่งใสเพื่อให้เห็นพื้นหลังของทั้งหน้า */
       border-radius: 20px;
       overflow: hidden;
       display: flex;
@@ -75,6 +79,7 @@
       align-items: flex-end;
       border: 1px solid var(--border-color);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px); /* เพิ่ม Blur นิดๆ ให้ดูพรีเมียม */
     }
     .profile-visual img {
       max-height: 100%;
@@ -84,22 +89,41 @@
       position: relative;
     }
 
-    /* Aura Effect */
-    .aura-effect {
+    /* Aura/Smoke Effect */
+    .aura-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .aura-layer {
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at bottom, var(--aura-color, rgba(255, 255, 255, 0.3)) 0%, transparent 70%);
-      filter: blur(50px);
-      opacity: 0.7;
-      animation: pulseAura 3s infinite alternate;
-      z-index: 1;
+      background: radial-gradient(circle at 50% 50%, var(--aura-color, rgba(255, 255, 255, 0.1)) 0%, transparent 80%);
+      filter: blur(120px);
+      opacity: 0.5;
+      mix-blend-mode: screen;
     }
-    @keyframes pulseAura {
-      0% { transform: scale(0.95); opacity: 0.6; }
-      100% { transform: scale(1.05); opacity: 0.8; }
+    .layer-1 { animation: smokeMove1 15s infinite alternate ease-in-out; }
+    .layer-2 { 
+      animation: smokeMove2 20s infinite alternate-reverse ease-in-out; 
+      opacity: 0.3;
+      background: radial-gradient(circle at 30% 70%, var(--aura-color, rgba(255, 255, 255, 0.1)) 0%, transparent 70%);
+    }
+
+    @keyframes smokeMove1 {
+      0% { transform: translate(-5%, -5%) scale(1); }
+      50% { transform: translate(5%, 5%) scale(1.2); }
+      100% { transform: translate(-2%, 2%) scale(1.1); }
+    }
+    @keyframes smokeMove2 {
+      0% { transform: translate(5%, 5%) scale(1.1); }
+      50% { transform: translate(-5%, -2%) scale(1); }
+      100% { transform: translate(2%, -5%) scale(1.25); }
     }
 
     .profile-details {
@@ -283,6 +307,12 @@
     <p class="loading-text">กำลังโหลด</p>
   </div>
 
+  <!-- Background Aura/Smoke Effect -->
+  <div class="aura-bg" id="auraEffect">
+    <div class="aura-layer layer-1"></div>
+    <div class="aura-layer layer-2"></div>
+  </div>
+
   <header class="lumina-header">
     <nav class="lumina-nav">
       <a href="lumina.html">หน้าหลัก</a>
@@ -294,7 +324,6 @@
   <div class="profile-container">
     <div class="profile-visual">
       <img id="pImg" src="" alt="Profile Image">
-      <div class="aura-effect" id="auraEffect"></div>
     </div>
     
     <div class="profile-details">
