@@ -312,6 +312,9 @@
     }
 
     @media (max-width: 900px) {
+      section {
+        padding: 0 5%; /* ลด Padding ด้านข้างเพื่อให้เนื้อหาขยายได้มากขึ้น */
+      }
       .content-box {
         grid-template-areas: 
           "title"
@@ -319,15 +322,44 @@
           "image";
         grid-template-columns: 1fr;
         text-align: center;
-        padding-top: 80px;
+        padding-top: 60px; /* ลดระยะด้านบนเล็กน้อย */
+        gap: 20px; /* ลดช่องว่างระหว่างองค์ประกอบ */
       }
-      .section-title-wrap { text-align: center; }
-      h1 { font-size: 32px; }
-      p { font-size: 16px; }
-      .section-image-wrap { height: 250px; }
+      .section-title-wrap { 
+        text-align: center; 
+        transform: translateY(30px); /* เปลี่ยนเป็นเลื่อนขึ้นแทนเลื่อนข้าง */
+      }
+      .section-desc-wrap {
+        transform: translateY(30px);
+        text-align: center;
+      }
+      h1 { 
+        font-size: 36px; /* ปรับขนาดให้พอดีหน้าจอ */
+        letter-spacing: 2px;
+      }
+      .school-motto {
+        font-size: 14px !important;
+        margin-top: 10px !important;
+      }
+      p { 
+        font-size: 16px; 
+        line-height: 1.6;
+        word-break: keep-all; /* ป้องกันการตัดคำที่ทำให้อ่านยาก */
+        padding: 0 10px;
+      }
+      .section-image-wrap { 
+        height: 200px; 
+        margin-top: 10px;
+      }
       .lumina-header { justify-content: space-between; padding: 0 20px; }
       .lumina-nav { display: none; }
       .mobile-nav-toggle { display: block; }
+      
+      /* ปรับปรุง Scroll Hint บนมือถือ */
+      .scroll-hint {
+        bottom: 10px;
+        font-size: 10px;
+      }
     }
   </style>
 </head>
