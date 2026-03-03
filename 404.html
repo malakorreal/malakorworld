@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Lumina Evernight</title>
+  <link rel="icon" href="assets/Lumina/Logo/Lumina-Logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-yellow: #ffcc00;
+      --text-color: #e0e0e0;
+      --bg-color: #0a0a0a;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Grid Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+    }
+
+    .container {
+      text-align: center;
+      z-index: 1;
+      position: relative;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 120px;
+      color: var(--primary-yellow);
+      margin: 0;
+      letter-spacing: 10px;
+      text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+    }
+
+    h2 {
+      font-size: 36px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+
+    p {
+      font-size: 18px;
+      color: #aaa;
+      margin-bottom: 40px;
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 30px;
+      background: var(--primary-yellow);
+      color: black;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+    }
+
+    .home-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+    }
+
+    /* Mouse Glow Effect */
+    #mouseGlow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at center, rgba(255, 204, 0, 0.15), transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      animation: pulseGlow 5s infinite alternate;
+    }
+    body:hover #mouseGlow {
+      opacity: 1;
+    }
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="mouseGlow"></div>
+  <div class="container">
+    <h1>404</h1>
+    <h2>PAGE NOT FOUND</h2>
+    <p>ดูเหมือนว่าคุณจะหลงทางในเงามืดของ Lumina Evernight</p>
+    <a href="lumina.html" class="home-btn">กลับสู่หน้าหลัก</a>
+  </div>
+
+  <script>
+    // Mouse Glow Effect
+    const mouseGlow = document.getElementById('mouseGlow');
+    window.addEventListener('mousemove', (e) => {
+      mouseGlow.style.setProperty('--x', `${e.clientX}px`);
+      mouseGlow.style.setProperty('--y', `${e.clientY}px`);
+      mouseGlow.style.left = `var(--x)`;
+      mouseGlow.style.top = `var(--y)`;
+    });
+  </script>
+</body>
+</html>
