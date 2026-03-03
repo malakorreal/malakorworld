@@ -95,50 +95,14 @@
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
     }
-
-    /* Mouse Glow Effect */
-    #mouseGlow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle at center, rgba(255, 204, 0, 0.15), transparent 70%);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      animation: pulseGlow 5s infinite alternate;
-    }
-    body:hover #mouseGlow {
-      opacity: 1;
-    }
-    @keyframes pulseGlow {
-      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
-      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    }
   </style>
 </head>
 <body>
-  <div id="mouseGlow"></div>
   <div class="container">
     <h1>404</h1>
     <h2>PAGE NOT FOUND</h2>
     <p>ดูเหมือนว่าคุณจะหลงทางในเงามืดของ Lumina Evernight</p>
     <a href="lumina.html" class="home-btn">กลับสู่หน้าหลัก</a>
   </div>
-
-  <script>
-    // Mouse Glow Effect
-    const mouseGlow = document.getElementById('mouseGlow');
-    window.addEventListener('mousemove', (e) => {
-      mouseGlow.style.setProperty('--x', `${e.clientX}px`);
-      mouseGlow.style.setProperty('--y', `${e.clientY}px`);
-      mouseGlow.style.left = `var(--x)`;
-      mouseGlow.style.top = `var(--y)`;
-    });
-  </script>
 </body>
 </html>
