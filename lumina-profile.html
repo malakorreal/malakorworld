@@ -551,37 +551,6 @@
         document.body.style.overflow = '';
       });
     });
-
-    // Background Parallax (Mouse & Gyroscope)
-    // Desktop: Mouse Move
-    window.addEventListener('mousemove', (e) => {
-      const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-      const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-      document.body.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
-    });
-
-    // Mobile: Device Tilt (Gyroscope)
-    function handleOrientation(e) {
-      if (e.gamma !== null && e.beta !== null) {
-        const moveX = e.gamma * 0.4; 
-        const moveY = (e.beta - 45) * 0.4;
-        document.body.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
-      }
-    }
-
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      window.addEventListener('click', () => {
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            if (response === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation);
-            }
-          })
-          .catch(console.error);
-      }, { once: true });
-    } else {
-      window.addEventListener('deviceorientation', handleOrientation);
-    }
   </script>
 </body>
 </html>

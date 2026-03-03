@@ -269,53 +269,11 @@
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
 
-        // รอจนกว่าทรัพยากรจะโหลดเสร็จ + แสดง Animation ให้ครบเวลาที่กำหนด
         setTimeout(() => {
           preloader.classList.add('hidden');
         }, remainingTime);
       });
     })();
-
-    // Mouse Glow Effect
-    const mouseGlow = document.getElementById('mouseGlow');
-    window.addEventListener('mousemove', (e) => {
-      mouseGlow.style.setProperty('--x', `${e.clientX}px`);
-      mouseGlow.style.setProperty('--y', `${e.clientY}px`);
-    });
-
-    // Parallax on Background (Mouse & Gyroscope)
-    const page = document.querySelector('.lumina-page');
-    
-    // Desktop: Mouse Move
-    window.addEventListener('mousemove', (e) => {
-      const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-      const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-      page.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
-    });
-
-    // Mobile: Device Tilt (Gyroscope)
-    function handleOrientation(e) {
-      if (e.gamma !== null && e.beta !== null) {
-        const moveX = e.gamma * 0.4; 
-        const moveY = (e.beta - 45) * 0.4;
-        page.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
-      }
-    }
-
-    // Request Permission for iOS 13+
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      window.addEventListener('click', () => {
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            if (response === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation);
-            }
-          })
-          .catch(console.error);
-      }, { once: true });
-    } else {
-      window.addEventListener('deviceorientation', handleOrientation);
-    }
 
     // Mobile Navigation Toggle
     const mobileNavToggle = document.getElementById('mobileNavToggle');
