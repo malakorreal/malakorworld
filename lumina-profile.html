@@ -89,41 +89,50 @@
       position: relative;
     }
 
-    /* Aura/Smoke Effect */
+    /* Aura/Smoke Effect (Synced with About Page Style) */
     .aura-bg {
       position: fixed;
-      inset: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 350px; /* เพิ่มความสูงของแถบควันจาก 350px เป็น 600px */
+      pointer-events: none;
       z-index: -1;
       overflow: hidden;
-      pointer-events: none;
+      mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, transparent 90%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, transparent 90%);
     }
     .aura-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      bottom: -150px; /* ปรับให้สูงขึ้นจากเดิมที่ -150px */
+      left: -50%;
+      width: 200%;
       height: 100%;
-      background: radial-gradient(circle at 50% 50%, var(--aura-color, rgba(255, 255, 255, 0.1)) 0%, transparent 80%);
-      filter: blur(120px);
-      opacity: 0.5;
-      mix-blend-mode: screen;
+      background: radial-gradient(ellipse at center, 
+        var(--aura-color, rgba(255, 255, 255, 0.15)) 0%, 
+        rgba(255, 255, 255, 0.05) 40%, 
+        transparent 70%
+      );
+      filter: blur(80px); /* เพิ่ม Blur ให้ฟุ้งขึ้น */
+      opacity: 0.3; /* ปรับให้จางลง */
+      animation: drift 12s infinite linear;
     }
-    .layer-1 { animation: smokeMove1 15s infinite alternate ease-in-out; }
-    .layer-2 { 
-      animation: smokeMove2 20s infinite alternate-reverse ease-in-out; 
-      opacity: 0.3;
-      background: radial-gradient(circle at 30% 70%, var(--aura-color, rgba(255, 255, 255, 0.1)) 0%, transparent 70%);
+    .layer-2 {
+      animation-duration: 18s;
+      animation-delay: -5s;
+      opacity: 0.2; /* จางลง */
+      background: radial-gradient(ellipse at center, var(--aura-color, rgba(255, 255, 255, 0.1)) 0%, transparent 60%);
+    }
+    .layer-3 {
+      animation-duration: 25s;
+      animation-delay: -10s;
+      opacity: 0.15; /* จางลง */
+      bottom: -180px;
     }
 
-    @keyframes smokeMove1 {
-      0% { transform: translate(-5%, -5%) scale(1); }
-      50% { transform: translate(5%, 5%) scale(1.2); }
-      100% { transform: translate(-2%, 2%) scale(1.1); }
-    }
-    @keyframes smokeMove2 {
-      0% { transform: translate(5%, 5%) scale(1.1); }
-      50% { transform: translate(-5%, -2%) scale(1); }
-      100% { transform: translate(2%, -5%) scale(1.25); }
+    @keyframes drift {
+      from { transform: translateX(-25%) translateY(0) skewX(-8deg); }
+      to { transform: translateX(25%) translateY(-30px) skewX(8deg); }
     }
 
     .profile-details {
@@ -311,6 +320,7 @@
   <div class="aura-bg" id="auraEffect">
     <div class="aura-layer layer-1"></div>
     <div class="aura-layer layer-2"></div>
+    <div class="aura-layer layer-3"></div>
   </div>
 
   <header class="lumina-header">
