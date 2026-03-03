@@ -60,6 +60,53 @@
     .lumina-nav a:hover { opacity: 0.7; }
     .lumina-nav a.active { border-bottom: 2px solid white; }
 
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+      z-index: 101;
+      transition: transform 0.3s;
+    }
+    .mobile-nav-toggle.active {
+      transform: rotate(90deg);
+    }
+
+    /* Mobile Overlay */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-overlay a {
+      color: white;
+      text-decoration: none;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+    .mobile-overlay a:hover, .mobile-overlay a.active {
+      color: var(--primary-yellow);
+    }
+
     /* Discord Login & User UI (Synced with header) */
     .discord-btn {
       background: #5865F2;
@@ -351,6 +398,11 @@
       .profile-detail-container { flex-direction: column; max-width: 500px; max-height: 90vh; overflow-y: auto; }
       .profile-left { flex: 0 0 350px; }
       .info-grid { grid-template-columns: 1fr 1fr; }
+      
+      .lumina-header { justify-content: space-between; padding: 0 20px; }
+      .lumina-nav { display: none; }
+      .mobile-nav-toggle { display: block; }
+      .discord-btn { font-size: 12px; padding: 5px 10px; }
     }
 
     /* Admin Add Modal */
@@ -637,6 +689,17 @@
         <img src="" id="userAvatar" alt="User">
         <span id="userName">Username</span>
       </div>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Overlay Menu -->
+    <div class="mobile-overlay" id="mobileOverlay">
+      <a href="lumina.html">หน้าหลัก</a>
+      <a href="lumina-about.html">เกี่ยวกับ</a>
+      <a href="lumina-members.html" class="active">สมาชิก</a>
     </div>
   </header>
 
@@ -1208,6 +1271,37 @@
     
     // ตรวจสอบสิทธิ์ซ้ำทุกๆ 30 วินาทีเพื่อให้เป็น Real-time ตลอดเวลา
     setInterval(checkAdminStatusRealtime, 30000);
+
+    // Mobile Navigation Toggle
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const toggleIcon = mobileNavToggle.querySelector('i');
+
+    mobileNavToggle.addEventListener('click', () => {
+      mobileOverlay.classList.toggle('active');
+      mobileNavToggle.classList.toggle('active');
+      
+      if (mobileOverlay.classList.contains('active')) {
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+        document.body.style.overflow = 'hidden';
+      } else {
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking a link
+    mobileOverlay.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileOverlay.classList.remove('active');
+        mobileNavToggle.classList.remove('active');
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      });
+    });
   </script>
 </body>
 </html>

@@ -8,6 +8,8 @@
   <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary-yellow: #ffcc00;
@@ -262,6 +264,53 @@
     .yellow-spinner { width: 60px; height: 60px; border: 6px solid rgba(255, 204, 0, 0.1); border-top: 6px solid #ffcc00; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+      z-index: 101;
+      transition: transform 0.3s;
+    }
+    .mobile-nav-toggle.active {
+      transform: rotate(90deg);
+    }
+
+    /* Mobile Overlay */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-overlay a {
+      color: white;
+      text-decoration: none;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+    .mobile-overlay a:hover, .mobile-overlay a.active {
+      color: var(--primary-yellow);
+    }
+
     @media (max-width: 900px) {
       .content-box {
         grid-template-areas: 
@@ -276,8 +325,9 @@
       h1 { font-size: 32px; }
       p { font-size: 16px; }
       .section-image-wrap { height: 250px; }
-      .lumina-header { justify-content: center; padding: 0 20px; }
-      .lumina-nav a { font-size: 18px; }
+      .lumina-header { justify-content: space-between; padding: 0 20px; }
+      .lumina-nav { display: none; }
+      .mobile-nav-toggle { display: block; }
     }
   </style>
 </head>
@@ -293,6 +343,17 @@
       <a href="lumina-about.html" class="active">เกี่ยวกับ</a>
       <a href="lumina-members.html">สมาชิก</a>
     </nav>
+
+    <button class="mobile-nav-toggle" id="mobileNavToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile Overlay Menu -->
+    <div class="mobile-overlay" id="mobileOverlay">
+      <a href="lumina.html">หน้าหลัก</a>
+      <a href="lumina-about.html" class="active">เกี่ยวกับ</a>
+      <a href="lumina-members.html">สมาชิก</a>
+    </div>
   </header>
 
   <footer class="lumina-footer">
@@ -458,6 +519,37 @@
     }, observerOptions);
 
     sections.forEach(section => observer.observe(section));
+
+    // Mobile Navigation Toggle
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const toggleIcon = mobileNavToggle.querySelector('i');
+
+    mobileNavToggle.addEventListener('click', () => {
+      mobileOverlay.classList.toggle('active');
+      mobileNavToggle.classList.toggle('active');
+      
+      if (mobileOverlay.classList.contains('active')) {
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+      } else {
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking a link
+    mobileOverlay.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileOverlay.classList.remove('active');
+        mobileNavToggle.classList.remove('active');
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      });
+    });
   </script>
 </body>
 </html>

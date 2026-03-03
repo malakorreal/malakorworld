@@ -8,6 +8,8 @@
   <link rel="icon" type="image/x-icon" href="assets/Mlogo (1).ico">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -104,17 +106,64 @@
       letter-spacing: 1px;
       z-index: 5;
     }
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+      z-index: 101;
+      transition: transform 0.3s;
+    }
+    .mobile-nav-toggle.active {
+      transform: rotate(90deg);
+    }
+
+    /* Mobile Overlay */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-overlay a {
+      color: white;
+      text-decoration: none;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+    .mobile-overlay a:hover, .mobile-overlay a.active {
+      color: var(--primary-yellow);
+    }
+
     /* ปรับแต่งสำหรับ Mobile */
     @media (max-width: 768px) {
       .lumina-header {
-        justify-content: center;
+        justify-content: space-between;
         padding: 0 20px;
       }
       .lumina-nav {
-        gap: 15px;
+        display: none;
       }
-      .lumina-nav a {
-        font-size: 18px;
+      .mobile-nav-toggle {
+        display: block;
       }
       .lumina-logo {
         max-width: 80%;
@@ -169,11 +218,25 @@
 
   <div class="lumina-page">
     <header class="lumina-header">
+      <!-- Mobile Logo Placeholder (Left) -->
+      <div style="width: 40px; display: none;" class="mobile-logo-placeholder"></div>
+      
       <nav class="lumina-nav">
         <a href="lumina.html" class="active">หน้าหลัก</a>
         <a href="lumina-about.html">เกี่ยวกับ</a>
         <a href="lumina-members.html">สมาชิก</a>
       </nav>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Mobile Overlay Menu -->
+      <div class="mobile-overlay" id="mobileOverlay">
+        <a href="lumina.html" class="active">หน้าหลัก</a>
+        <a href="lumina-about.html">เกี่ยวกับ</a>
+        <a href="lumina-members.html">สมาชิก</a>
+      </div>
     </header>
 
     <main class="lumina-content">
@@ -223,6 +286,37 @@
       const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
       const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
       page.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
+    });
+
+    // Mobile Navigation Toggle
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const toggleIcon = mobileNavToggle.querySelector('i');
+
+    mobileNavToggle.addEventListener('click', () => {
+      mobileOverlay.classList.toggle('active');
+      mobileNavToggle.classList.toggle('active');
+      
+      if (mobileOverlay.classList.contains('active')) {
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+      } else {
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking a link
+    mobileOverlay.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileOverlay.classList.remove('active');
+        mobileNavToggle.classList.remove('active');
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+        document.body.style.overflow = '';
+      });
     });
   </script>
 </body>
