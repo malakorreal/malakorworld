@@ -709,6 +709,7 @@
       </div>
       <div class="input-group" style="margin-top: 15px;"><label>URL รูปโปรไฟล์ (แสดงในหน้าสมาชิก)</label><input type="text" id="fImg"></div>
       <div class="input-group"><label>URL รูปตัวละครเต็ม (แสดงในหน้า Profile)</label><input type="text" id="fFullImg"></div>
+      <div class="input-group"><label>สีออร่า (Hex Color)</label><input type="text" id="fAuraColor" placeholder="เช่น #ff00ff หรือ #c0c0c0"></div>
       <div class="input-group"><label>คำอธิบายตัวละคร</label><textarea id="fDesc" rows="5"></textarea></div>
       <div class="input-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
         <input type="checkbox" id="fLock" style="width: 20px; height: 20px; cursor: pointer;">
@@ -1116,10 +1117,11 @@
           document.getElementById('fStatus').value = m.status;
           document.getElementById('fImg').value = m.img;
           document.getElementById('fFullImg').value = m.fullImg || '';
-          document.getElementById('fDesc').value = m.desc || '';
-          document.getElementById('fLock').checked = m.isLocked || false;
-          document.getElementById('fYoutube').value = m.social?.youtube || '';
-          document.getElementById('fIg').value = m.social?.instagram || '';
+      document.getElementById('fDesc').value = m.desc || m.description || '';
+      document.getElementById('fLock').checked = m.isLocked || false;
+      document.getElementById('fAuraColor').value = m.auraColor || ''; // โหลด auraColor
+      document.getElementById('fYoutube').value = m.social?.youtube || '';
+      document.getElementById('fIg').value = m.social?.instagram || '';
           document.getElementById('fFb').value = m.social?.facebook || '';
         }
       } else {
@@ -1149,6 +1151,7 @@
         fullImg: document.getElementById('fFullImg').value,
         desc: document.getElementById('fDesc').value, // ใช้ 'desc' เพื่อให้ตรงกับ Supabase
         isLocked: document.getElementById('fLock').checked,
+        auraColor: document.getElementById('fAuraColor').value || null, // เพิ่ม auraColor
         social: {
           youtube: document.getElementById('fYoutube').value,
           instagram: document.getElementById('fIg').value,
