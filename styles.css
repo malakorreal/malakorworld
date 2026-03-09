@@ -518,10 +518,9 @@ body[data-theme="dark"] .nav-toggle {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(255, 205, 240, 0.8), transparent 60%),
-    radial-gradient(circle at 85% 15%, rgba(200, 180, 255, 0.8), transparent 60%),
-    linear-gradient(135deg, rgba(255, 240, 255, 0.2), #f5ecff 80%);
+  background-image: url('assets/malakorbanner.png');
+  background-size: cover;
+  background-position: center;
   transform: scale(1.1);
   z-index: -2;
 }
@@ -529,8 +528,18 @@ body[data-theme="dark"] .nav-toggle {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(247, 239, 255, 0.96));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
   z-index: -1;
+}
+
+.hero-title {
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content {
