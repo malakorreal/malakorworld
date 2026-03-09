@@ -518,9 +518,10 @@ body[data-theme="dark"] .nav-toggle {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('assets/Lumina/Background/1.png');
-  background-size: cover;
-  background-position: center;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 205, 240, 0.8), transparent 60%),
+    radial-gradient(circle at 85% 15%, rgba(200, 180, 255, 0.8), transparent 60%),
+    linear-gradient(135deg, rgba(255, 240, 255, 0.2), #f5ecff 80%);
   transform: scale(1.1);
   z-index: -2;
 }
