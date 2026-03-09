@@ -533,11 +533,74 @@ body[data-theme="dark"] .nav-toggle {
   z-index: -1;
 }
 
-.hero-content {
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
   position: relative;
   z-index: 2;
-  text-align: center;
-  padding: 0 16px;
+}
+
+.hero-content {
+  position: relative;
+  text-align: left;
+  padding: 0;
+  flex: 1.2;
+}
+
+.hero-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.hero-image-wrap {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 20px 40px rgba(159, 139, 255, 0.15);
+  background: white;
+  transition: transform var(--transition-normal);
+  transform: rotateY(-10deg) rotateX(5deg);
+}
+
+.hero-image-wrap:hover {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+}
+
+.hero-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 40px;
+  }
+  
+  .hero-content {
+    text-align: center;
+    flex: none;
+  }
+  
+  .hero-visual {
+    width: 100%;
+    margin-top: 40px;
+  }
+  
+  .hero-image-wrap {
+    max-width: 300px;
+    transform: none;
+  }
 }
 
 .hero-scroll-hint {
@@ -629,7 +692,13 @@ body[data-theme="dark"] .nav-toggle {
   display: inline-flex;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+  .hero-actions {
+    justify-content: center;
+  }
 }
 
 .btn {
